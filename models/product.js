@@ -7,14 +7,16 @@ class Product {
     id,
     sku,
     productName,
+    productFamily,
+    productType,
     productDescription,
     radioFreq,
-    imgURL,
-    webURL,
   }) {
     this.id = id;
     this.sku = sku;
     this.productName = productName;
+    this.productFamily = productFamily;
+    this.productType = productType;
     this.productDescription = productDescription;
     this.radioFreq = radioFreq;
     this.imgURL = imgURL;
