@@ -5,7 +5,7 @@ const { SECRET_KEY } = require('../config.js');
 const ExpressError = require('../expressError.js');
 const Customer = require('../models/customer.js');
 
-/** POST /login - login: {email, password} => {token}
+/** POST /login - login: {username, password} => {token}
  *
  * Make sure to update their last-login!
  *
@@ -13,14 +13,14 @@ const Customer = require('../models/customer.js');
 
 router.post('/login', async (req, res, next) => {
   try {
-    // const { email, password } = req.body;
-    // if (await Customer.authenticate(email, password)) {
-    //   let token = jwt.sign({ email }, SECRET_KEY);
-    //   Customer.updateLoginTimestamp(email);
-    //   return res.json({ token });
-    // } else {
-    //   throw new ExpressError('Invalid email/password', 400);
-    // }
+    const { username, password } = req.body;
+    if (await Customer.authenticate(username, password)) {
+      let token = jwt.sign({ username }, SECRET_KEY);
+      Customer.updateLoginTimestamp(username);
+      return res.json({ token });
+    } else {
+      throw new ExpressError('Invalid username/password', 400);
+    }
   } catch (e) {
     next(e);
   }
@@ -35,9 +35,9 @@ router.post('/login', async (req, res, next) => {
 
 router.post('/register', async (req, res, next) => {
   try {
-    const { email } = await Customer.register(req.body);
-    let token = jwt.sign({ email }, SECRET_KEY);
-    // Customer.updateLoginTimestamp(email);
+    const { username } = await Customer.register(req.body);
+    let token = jwt.sign({ username }, SECRET_KEY);
+    Customer.updateLoginTimestamp(username);
     return res.send({ token });
   } catch (e) {
     next(e);
