@@ -117,6 +117,18 @@ class ProductImage {
     );
     return results.rows;
   }
+
+  static async delete(productId) {
+    const results = await db.query(
+      `DELETE
+        FROM product_images
+        WHERE id = $1
+        RETURNING id
+      `,
+      [productId]
+    );
+    return results.rows[0];
+  }
 }
 
 module.exports = { Product, ProductImage };
