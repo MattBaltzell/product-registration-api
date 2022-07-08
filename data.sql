@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS customers CASCADE;
 DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS product_images;
 DROP TABLE IF EXISTS resources CASCADE;
 DROP TABLE IF EXISTS registrations CASCADE;
 
@@ -21,10 +22,17 @@ CREATE TABLE products (
     sku text NOT NULL UNIQUE,
     product_name text NOT NULL,
     product_family text NOT NULL,
+    product_type text NOT NULL,
     product_description text NOT NULL,
     radio_freq text,
-    img_url text,
     web_url text NOT NULL
+);
+
+CREATE TABLE product_images (
+    id SERIAL PRIMARY KEY,
+    product_id int NOT NULL,
+    url text NOT NULL,
+    alt_text text NOT NULL
 );
 
 CREATE TABLE resources(
