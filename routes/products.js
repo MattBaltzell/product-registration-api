@@ -29,6 +29,7 @@ router.get('/:sku', async (req, res, next) => {
 });
 
 /** Add new product */
+// Will need to add Auth middlewhere to ensure ADMIN ONLY access
 
 router.post('/', async (req, res, next) => {
   try {
@@ -40,6 +41,7 @@ router.post('/', async (req, res, next) => {
 });
 
 /** Edit a product */
+// Will need to add Auth middlewhere to ensure ADMIN ONLY access
 
 router.put('/:sku', async (req, res, next) => {
   try {
