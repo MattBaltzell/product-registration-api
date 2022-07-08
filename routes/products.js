@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = new express.Router();
 const Customer = require('../models/customer');
-const Product = require('../models/product');
+const { Product, ProductImage } = require('../models/product');
 
 /** Show all products */
 
@@ -19,7 +19,9 @@ router.get('/', async function (req, res, next) {
 
 router.get('/:sku', async (req, res, next) => {
   try {
-    const product = await Product.getBySKU(req.params.sku);
+    const product = await Product.get(req.params.sku);
+    const images = await ProductImage.get(product.id);
+    product.images = images;
     return res.send({ product });
   } catch (e) {
     return next(e);
