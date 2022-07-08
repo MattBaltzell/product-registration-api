@@ -36,11 +36,13 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-/** Get product registration by customer id */
+/** Get registered products by username */
 
-router.get('/customer/:id', async (req, res, next) => {
+router.get('/customer/:username', async (req, res, next) => {
   try {
-    const products = await Registration.getCustomerProducts(req.params.id);
+    const products = await Registration.getCustomerProducts(
+      req.params.username
+    );
     return res.send({ products });
   } catch (e) {
     return next(err);

@@ -5,6 +5,8 @@ const Customer = require('../models/customer');
 const { Product } = require('../models/product');
 const Registration = require('../models/registration');
 
+const { ensureLoggedIn, ensureCorrectUser } = require('../middleware/auth');
+
 /** Get list of all customers. */
 
 router.get('/', async (req, res, next) => {
@@ -18,11 +20,12 @@ router.get('/', async (req, res, next) => {
 
 /** Get customer info. */
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:username', ensureCorrectUser, async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const customer = await Customer.get(id);
-    customer.products = await Customer.getCustomerProducts(id);
+    const { username } = req.params;
+    const customer = await Customer.get(username);
+    const products = await Customer.getCustomerProducts(username);
+    customer.products = products;
     return res.send({ customer });
   } catch (err) {
     return next(err);
