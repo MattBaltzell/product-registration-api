@@ -88,7 +88,7 @@ class Customer {
 
   static async get(username) {
     const results = await db.query(
-      'SELECT id, username, first_name, last_name, email, phone, company, notes , join_at, last_login_at FROM customers WHERE username=$1',
+      'SELECT username, first_name, last_name, email, phone, company, notes , join_at, last_login_at FROM customers WHERE username=$1',
       [username]
     );
     if (!results.rows[0]) {
@@ -101,12 +101,12 @@ class Customer {
 
   static async getAll() {
     const results = await db.query(
-      'SELECT id, first_name, last_name, email, phone, company, notes FROM customers'
+      'SELECT first_name, last_name, email, phone, company, notes FROM customers'
     );
     return results.rows;
   }
 
-  /** given a customer id, find their registered products. */
+  /** given a customer username find their registered products. */
 
   static async getCustomerProducts(username) {
     const results = await db.query(
@@ -116,7 +116,7 @@ class Customer {
         ON p.id = r.product_id
         JOIN customers AS c
         ON r.username = c.username
-        WHERE username = $1`,
+        WHERE c.username = $1`,
       [username]
     );
 
