@@ -11,6 +11,7 @@ class Product {
     productType,
     productDescription,
     radioFreq,
+    webURL,
   }) {
     this.id = id;
     this.sku = sku;
@@ -19,13 +20,13 @@ class Product {
     this.productType = productType;
     this.productDescription = productDescription;
     this.radioFreq = radioFreq;
-    this.imgURL = imgURL;
+    this.images = [];
     this.webURL = webURL;
   }
 
   static async getAll() {
     const results = await db.query(
-      `SELECT sku, product_name, img_url, web_url
+      `SELECT product_name, sku, product_family, product_type, web_url
         FROM products
         ORDER BY product_name
       `
@@ -35,9 +36,9 @@ class Product {
   }
 
   /** Get product by SKU */
-  static async getBySKU(productSKU) {
+  static async get(productSKU) {
     const results = await db.query(
-      `SELECT sku, product_name, product_description, radio_freq, img_url, web_url
+      `SELECT *
         FROM products
         WHERE sku ILIKE $1`,
       [productSKU]
@@ -53,26 +54,69 @@ class Product {
   static async add({
     sku,
     productName,
+    productFamily,
+    productType,
     productDescription,
     radioFreq,
-    imgURL,
     webURL,
   }) {
     const results = await db.query(
       `INSERT INTO products (
         sku, 
         product_name, 
+        product_family,
+        product_type,
         product_description, 
-        radio_freq, 
-        img_url, 
-        web_url) 
-        VALUES ($1, $2, $3, $4, $5, $6) 
-        RETURNING sku,product_name,product_description,radio_freq,img_url,web_url`,
-      [sku, productName, productDescription, radioFreq, imgURL, webURL]
+        radio_freq,  
+        web_url ) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7) 
+        RETURNING sku, product_name, product_family, product_type, product_description, radio_freq, web_url`,
+      [
+        sku,
+        productName,
+        productFamily,
+        productType,
+        productDescription,
+        radioFreq,
+        webURL,
+      ]
     );
 
     return results.rows[0];
   }
 }
 
-module.exports = Product;
+class ProductImage {
+  constructor(id, productId, url, altText) {
+    this.id = id;
+    this.productId = productId;
+    this.url = url;
+    this.altText = altText;
+  }
+
+  static async add({ productId, url, altText }) {
+    const results = await db.query(
+      `INSERT INTO product_images (
+        product_id, 
+        url, 
+        alt_text ) 
+        VALUES ($1, $2, $3) 
+        RETURNING id, product_id, url, alt_text`,
+      [productId, url, altText]
+    );
+    return results.rows[0];
+  }
+
+  static async get(productId) {
+    const results = await db.query(
+      `SELECT *
+        FROM product_images
+        WHERE product_id = $1
+      `,
+      [productId]
+    );
+    return results.rows;
+  }
+}
+
+module.exports = { Product, ProductImage };
