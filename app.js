@@ -10,10 +10,14 @@ app.use(express.json());
 const authRoutes = require('./routes/auth');
 const customerRoutes = require('./routes/customers');
 const productRoutes = require('./routes/products');
+const imageRoutes = require('./routes/images');
+const registrationRoutes = require('./routes/registrations');
 
 app.use('/auth', authRoutes);
 app.use('/customers', customerRoutes);
 app.use('/products', productRoutes);
+app.use('/images', imageRoutes);
+app.use('/registrations', registrationRoutes);
 
 /** 404 handler */
 
