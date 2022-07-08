@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = new express.Router();
 const Customer = require('../models/customer');
-const Product = require('../models/product');
+const { Product } = require('../models/product');
 const Registration = require('../models/registration');
 
 /** Get list of all customers. */

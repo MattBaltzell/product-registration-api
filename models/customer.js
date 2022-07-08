@@ -2,7 +2,7 @@
 
 const db = require('../db');
 const bcrypt = require('bcrypt');
-const Product = require('./product');
+const { Product } = require('./product');
 const { BCRYPT_WORK_FACTOR } = require('../config.js');
 const ExpressError = require('../expressError');
 
