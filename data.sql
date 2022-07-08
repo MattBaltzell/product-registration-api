@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS resources CASCADE;
 DROP TABLE IF EXISTS registrations CASCADE;
 
 CREATE TABLE customers (
-    id SERIAL PRIMARY KEY,
+    username text PRIMARY KEY,
     email text NOT NULL UNIQUE,
     password text NOT NULL,
     first_name text NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE resources(
 
 CREATE TABLE registrations(
     id SERIAL PRIMARY KEY,
-    customer_id int NOT NULL REFERENCES customers ON DELETE CASCADE,
+    username text NOT NULL REFERENCES customers ON DELETE CASCADE,
     product_id int NOT NULL REFERENCES products ON DELETE CASCADE,
     serial_no text NOT NULL UNIQUE,
     registered_at timestamp with time zone NOT NULL
