@@ -8,20 +8,20 @@ const ExpressError = require('../expressError');
 /** Customer of Pliant */
 
 class Registration {
-  static async create({ customer_id, product_id, serial_no }) {
+  static async create({ username, product_id, serial_no }) {
     const results = await db.query(
       `INSERT INTO registrations AS r (
-              customer_id, 
+              username, 
               product_id, 
               serial_no,
               registered_at)
               VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
-              RETURNING customer_id, product_id, serial_no, registered_at
+              RETURNING username, product_id, serial_no, registered_at
               `,
-      [customer_id, product_id, serial_no]
+      [username, product_id, serial_no]
     );
     console.log('here in fn!');
-    if (!results.rows[0].customer_id) {
+    if (!results.rows[0].username) {
       throw new ExpressError('User not found', 400);
     }
     if (!results.rows[0].product_id) {
