@@ -3,6 +3,7 @@
 const express = require('express');
 
 const app = express();
+app.use(express.json());
 
 /** routes */
 
@@ -10,7 +11,6 @@ const authRoutes = require('./routes/auth');
 const customerRoutes = require('./routes/customers');
 const productRoutes = require('./routes/products');
 
-app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/customers', customerRoutes);
 app.use('/products', productRoutes);
