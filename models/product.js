@@ -84,6 +84,19 @@ class Product {
 
     return results.rows[0];
   }
+
+  /** delete a product */
+  static async delete(sku) {
+    const results = await db.query(
+      `DELETE
+        FROM products
+        WHERE sku = $1
+        RETURNING sku
+      `,
+      [sku]
+    );
+    return results.rows[0];
+  }
 }
 
 class ProductImage {

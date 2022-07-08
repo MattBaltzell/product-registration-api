@@ -49,11 +49,20 @@ router.put('/:sku', async (req, res, next) => {
 });
 
 /** Delete a product */
+// Will need to add Auth middlewhere to ensure ADMIN ONLY access
 
 router.delete('/:sku', async (req, res, next) => {
   try {
-  } catch (e) {
-    next(e);
+    const result = await Product.delete(req.params.sku);
+    if (!result.sku) {
+      throw new ExpressError(
+        `Product with sku of ${sku} cannot be found.`,
+        400
+      );
+    }
+    return res.send({ message: 'Deleted.' });
+  } catch (err) {
+    return next(err);
   }
 });
 
