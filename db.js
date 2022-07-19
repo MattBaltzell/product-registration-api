@@ -2,7 +2,7 @@
 
 const pg = require('pg');
 
-const db = new pg.Client('postgresql:///pliant-product-registration');
+const db = new pg.Client('postgresql:///product-registration');
 
 db.connect();
 
