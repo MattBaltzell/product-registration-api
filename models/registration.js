@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const Customer = require('./customer');
 const Product = require('./product');
 const { BCRYPT_WORK_FACTOR } = require('../config.js');
-const ExpressError = require('../expressError');
+const {ExpressError} = require('../expressError');
 
 /** Customer of Pliant */
 

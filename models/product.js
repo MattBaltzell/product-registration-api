@@ -1,5 +1,5 @@
 const db = require('../db');
-const ExpressError = require('../expressError');
+const {ExpressError} = require('../expressError');
 const Customer = require('./customer');
 
 class Product {
