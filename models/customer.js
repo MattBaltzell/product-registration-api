@@ -31,7 +31,16 @@ class Customer {
     this.products = [];
   }
 
-  /** register new customer */
+  /** REGISTER NEW CUSTOMER 
+   * 
+   * Pass in data object containing username, password, email, firstName, lastName, phone, company
+   * 
+   * Hashes password for storing in db
+   * 
+   * Inserts data into SQL query to create new customer in db
+   * 
+   * Returns {username, email, first_name, last_name, phone, company}
+  */
 
   static async register({
     username,
@@ -54,7 +63,7 @@ class Customer {
         company,
         join_at) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP) 
-        RETURNING username email, first_name, last_name, phone, company`,
+        RETURNING username, email, first_name, last_name, phone, company`,
       [username, hashed_pw, email, firstName, lastName, phone, company]
     );
 
