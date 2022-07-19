@@ -2,9 +2,8 @@
 
 const db = require('../db');
 const bcrypt = require('bcrypt');
-const { Product } = require('./product');
 const { BCRYPT_WORK_FACTOR } = require('../config.js');
-const {ExpressError} = require('../expressError');
+const {NotFoundError} = require('../expressError');
 
 /** Customer  */
 
@@ -101,7 +100,7 @@ class Customer {
       [username]
     );
     if (!results.rows[0]) {
-      throw new ExpressError(`User not found`, 404);
+      throw new NotFoundError(`User not found`);
     }
     return results.rows[0];
   }
