@@ -2,24 +2,21 @@
 
 const express = require('express');
 const cors = require('cors');
+
+const { NotFoundError } = require("./expressError");
+
 const { authenticateJWT } = require('./middleware/auth');
-
-const app = express();
-app.use(express.json());
-
-// allow connections to all routes from any browser
-app.use(cors());
-
-// get auth token for all routes
-app.use(authenticateJWT);
-
-/** routes */
-
 const authRoutes = require('./routes/auth');
 const customerRoutes = require('./routes/customers');
 const productRoutes = require('./routes/products');
 const imageRoutes = require('./routes/images');
 const registrationRoutes = require('./routes/registrations');
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use(authenticateJWT);
 
 app.use('/auth', authRoutes);
 app.use('/customers', customerRoutes);
@@ -27,22 +24,20 @@ app.use('/products', productRoutes);
 app.use('/images', imageRoutes);
 app.use('/registrations', registrationRoutes);
 
-/** 404 handler */
-
+/** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {
-  const err = new Error('Not Found');
-  err.status = 404;
-
-  // pass the error to the next piece of middleware
-  return next(err);
+  return next(new NotFoundError());
 });
 
-/** general error handler */
+/** Generic error handler; anything unhandled goes here. */
+app.use(function (err, req, res, next) {
+  if (process.env.NODE_ENV !== "test") console.error(err.stack);
+  const status = err.status || 500;
+  const message = err.message;
 
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-
-  return res.send({ err });
+  return res.status(status).json({
+    error: { message, status },
+  });
 });
 
 module.exports = app;
