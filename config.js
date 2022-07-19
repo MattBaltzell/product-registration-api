@@ -1,20 +1,36 @@
-/** Common config for message.ly */
+"use strict";
 
-// read .env files and make environmental variables
+/** Shared config for application; can be required many places. */
 
-require('dotenv').config();
+require("dotenv").config();
+require("colors");
 
-const DB_URI =
-  process.env.NODE_ENV === 'test'
-    ? 'postgresql:///product-registration_test'
-    : 'postgresql:///product-registration';
+const SECRET_KEY = process.env.SECRET_KEY || "secret-dev";
 
-const SECRET_KEY = process.env.SECRET_KEY || 'secret';
+const PORT = +process.env.PORT || 3001;
 
-const BCRYPT_WORK_FACTOR = 12;
+// Use dev database, testing database, or via env var, production database
+function getDatabaseUri() {
+  return (process.env.NODE_ENV === "test")
+      ? "product-registration_test"
+      : process.env.DATABASE_URL || "product-registration";
+}
+
+// Speed up bcrypt during tests, since the algorithm safety isn't being tested
+//
+// WJB: Evaluate in 2022 if this should be increased to 13 for non-test use
+const BCRYPT_WORK_FACTOR = process.env.NODE_ENV === "test" ? 1 : 12;
+
+console.log("Product Registration API Config:".green);
+console.log("SECRET_KEY:".yellow, SECRET_KEY);
+console.log("PORT:".yellow, PORT.toString());
+console.log("BCRYPT_WORK_FACTOR".yellow, BCRYPT_WORK_FACTOR);
+console.log("Database:".yellow, getDatabaseUri());
+console.log("---");
 
 module.exports = {
-  DB_URI,
   SECRET_KEY,
+  PORT,
   BCRYPT_WORK_FACTOR,
+  getDatabaseUri,
 };
